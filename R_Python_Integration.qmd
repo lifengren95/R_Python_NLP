@@ -1,0 +1,483 @@
+---
+title: "R and Python Integration for Natural Language Processing (NLP)"
+author: "Lifeng Ren"
+date: "11-27-2023"
+format: 
+    html: 
+        toc: true
+        toc-depth: 3
+        number-sections: true
+        mathjax: local
+        highlight: tango
+    pdf:
+        toc: true
+        number-sections: true
+        colorlinks: true
+python: python3
+---
+
+Before we start learning Large Language Models (LLM), let's use this lecture to get our feet wet for Natural Language Processing (NLP) in both `R` and `Python`. This will include 
+
+
+# Lecture Agenda
+
+In this lecture, we will cover the following topics:
+
+- `R` in `VS Code`
+    - Install `R` in `VS Code`
+    - Get familiar with `R` in `VS Code`
+
+- Natural Language Processing (NLP) in `R` and `Python`
+
+- Next Lecture: Large Language Models (LLM) with applications in Economics
+
+
+# R in VS Code
+
+## Install R in `VS Code`
+
+- I assume you all already installed `R` in your computer. If not, please go to [this website](https://cran.rstudio.com) and download the latest version of `R` and install it in your computer.
+
+### Install `R` extension in `VS Code`
+
+Go to the VS Code extension marketplace and search for `R` and install the extension.
+
+![](./imgs/vscode_extension_r.png)
+
+### Install `radian`
+
+- In your `8222` python environment, install pacakge `radian` using the following command:
+
+```bash
+mamba activate 8222env3
+mamba install -c conda-forge radian
+```
+
+Or, you can use `pip` to install `radian`:
+
+```bash
+pip install radian
+```
+
+- To Run `radian`:
+    
+    ```bash
+        radian
+    ```
+- To exit `radian`:
+
+    ```bash
+        q() 
+    ```
+
+### Launch `radian` and install `languageserver`
+
+In the `radian` console, run the following command to install `languageserver`, say `yes`, `1`, and `yes` to the following questions. 
+
+![](./imgs/languageserver_install_1.png)
+![](./imgs/languageserver_install_2.png)
+![](./imgs/languageserver_install_3.png)
+```{r}
+#| eval: false
+
+install.packages("languageserversetup")
+languageserversetup::languageserver_install()
+languageserversetup::languageserver_add_to_rprofile()
+```
+
+
+## Get Familiar with `R` in `VS Code`
+
+- `Help` Pages
+![](./imgs/help_pages.png)
+![](./imgs/help_pages_2.png)
+- New R terminal
+
+![](./imgs/generate_r_terminal.png)
+
+## Switch Gear to `VS Code`
+
+- Run selected R code in `VS Code`
+    - Windows: `Ctrl + Enter` to run selected code
+    - Mac: `Command + Enter` to run selected code
+- Run all R code in `VS Code`:
+    - Windows: `Ctrl + Shift + S` to run all code
+    - Mac: `Command + Shift + S` to run all code
+
+---
+
+I assume you all have the background of `R`, and I assume the first half of APEC 8222 taught you some text analysis in `R`, so I will start using `R` to do some NLP application, and gradually switch to `Python` to do the same thing.
+
+For more information on how `R` and `Python` packages are equivalent, please refer to this website:
+
+- <https://aeturrell.github.io/coding-for-economists/coming-from-r.html>
+
+---
+
+# Introduction to Natural Language Processing (NLP)
+
+NLP is one of the major branches of Artificial Intelligence (AI). The following table shows each branch with a brief description and examples of applications:
+
+| Branch of AI | Description | Examples of Applications |
+|--------------|-------------|--------------------------|
+| **Machine Learning (ML)** | Algorithms that enable computers to learn from and make predictions or decisions based on data. | - Recommendation systems<br>- Self-driving cars<br>- Predictive analytics |
+| **Natural Language Processing (NLP)** | Focuses on the interaction between computers and human language, enabling understanding, interpretation, and generation of human language. | - Speech recognition<br>- Language translation<br>- Sentiment analysis |
+| **Computer Vision** | Deals with how computers can gain high-level understanding from digital images or videos. | - Facial recognition systems<br>- Medical image analysis<br>- Autonomous vehicle navigation |
+| **Robotics** | Involves designing and building robots that perform tasks, often using AI for perception and decision-making. | - Industrial robots for manufacturing<br>- Surgical robots in healthcare<br>- Exploration robots in space missions |
+| **Expert Systems** | AI systems that simulate the decision-making ability of a human expert in specific domains. | - Medical diagnosis systems<br>- Financial investment advising<br>- Weather prediction models |
+| **Neural Networks and Deep Learning** | A subset of ML based on artificial neural networks, particularly useful for handling large amounts of unstructured data. | - Voice recognition and assistants<br>- Advanced game-playing AI (like chess and Go)<br>- Enhanced medical diagnoses |
+
+- This table provides a concise overview of the major branches of AI, their core functionalities, and examples of where they are applied in various industries and domains. Note that there will be overlap between these branches, and some applications may use multiple branches of AI.
+
+- The famous transformer model, is based on a paper called [Attention is All You Need](https://arxiv.org/abs/1706.03762), which was published in 2017 by Google. The transformer model is a type of neural network architecture that is based on the concept of attention. The transformer model is the foundation of many of the most advanced NLP models today, including BERT, GPT-3, and T5. 
+
+    - It was designed by solving a translation problem, but it can be used for many other NLP tasks, including text classification, question answering, and summarization. 
+    
+    - We will talk more about it in the next lecture. 
+
+## Foundamental Concepts in NLP
+
+Here's a table that defines each NLP term, along with an example for each:
+
+| Term | Definition | Example |
+|------|------------|---------|
+| **Type** | A distinct element of vocabulary in a text, representing a unique word. | In "cat, dog, dog", "cat" and "dog" are two types. |
+| **Token** | An instance of a sequence of characters in a text, often corresponding to a word or symbol. | In "I love AI", "I", "love", and "AI" are tokens. |
+| **Term** | A word or phrase used in a text or a collection of texts (corpus). | "Artificial intelligence" is a term in computer science texts. |
+| **Document** | A single text or record in a dataset, like an article, an email, or a webpage. | An individual Wikipedia article is a document. |
+| **Corpus** | A collection of documents, often used as a dataset in NLP. | A collection of all articles from a news website forms a corpus. |
+| **Bag of Words (BOW)** | A model treating text as a collection of words without considering syntax or word order but maintaining frequency. | In "cat and dog", BOW represents two words: "cat" (1), "dog" (1). |
+| **Term Frequency (TF)** | The frequency of a term in a document. | In a document with 100 words, where the word "AI" appears 5 times, TF for "AI" is 5/100. |
+| **Inverse Document Frequency (IDF)** | A measure of how much information a term provides by considering how common or rare it is across all documents. | "AI" appearing in 1 out of 1000 documents has higher IDF than if it appears in 100 out of 1000. |
+| **TF-IDF** | A statistical measure used to evaluate the importance of a word to a document in a corpus; combines TF and IDF. | High TF-IDF for "neural network" in a document indicates its importance in that document within the given corpus. |
+| **Stop Words** | Commonly used words in a language that are filtered out before processing text. | Words like "is", "and", "the" are often considered stop words. |
+| **Stemming** | The process of reducing words to their base or root form, often crudely by chopping off word endings. | "Running", "runner" stem to "run". |
+| **Lemmatization** | Similar to stemming but more sophisticated, reducing words to their base or dictionary form. | "Better" is lemmatized to "good". |
+| **Part of Speech (POS) Tagging** | The process of marking up a word in a text as corresponding to a particular part of speech. | In "The quick brown fox", "quick" is tagged as an adjective. |
+| **Named Entity Recognition (NER)** | The process of identifying and classifying key information (entities) in text into predefined categories. | In "Apple Inc. was founded by Steve Jobs", "Apple Inc." is recognized as an organization. |
+| **Word Embedding** | A technique in NLP where words or phrases are encoded as real-valued vectors in a predefined vector space. | Each word in a corpus is represented as a vector in a multi-dimensional space. |
+
+## Very Very Basic NLP Application in `R` and `Python`
+
+NLP has many applications, including but not limited to:
+ - Document classification
+ - Sentiment analysis
+ - Author identification
+ - Question answering
+ - Topic modeling
+
+### Some Rules and Math
+
+#### Zipf's Law
+
+$$
+\text { word frequency } \propto \frac{1}{\text { word rank }} \text {. }
+$$
+It is usually found that the most common word occurs approximately twice as often as the next common one, three imes as often as the third most common, and so on. 
+
+#### TF-IDF
+
+**Term frequency**, $\operatorname{tf}(t, d)$, is the relative frequency of term $t$ within document $d$,
+$$
+\operatorname{tf}(t, d)=\frac{f_{t, d}}{\sum_{t^{\prime} \in d} f_{t^{\prime}, d}},
+$$
+where $f_{t, d}$ is the raw count of a term in a document, i.e., the number of times that term $t$ occurs in document $d$. Note the denominator is simply the total number of terms in document $d$ (counting each occurrence of the same term separately).
+
+**Inverse Document Frequency**
+$$
+\operatorname{idf}(t, D)=\log \frac{N}{|\{d \in D: t \in d\}|} = \log _{10}(\operatorname{count}(t, d)+1)
+$$
+with
+
+- $N$ : total number of documents in the corpus $N=|D|$
+- $|\{d \in D: t \in d\}|$ : number of documents where the term $t$ appears (i.e., $\operatorname{tf}(t, d) \neq 0$ ). 
+
+$$
+\operatorname{tfidf}(t, d, D)=\operatorname{tf}(t, d) \cdot \operatorname{idf}(t, D) = \log _{10} \frac{N}{\mathrm{df}_t}
+$$
+
+**Example**:
+$$
+\begin{array}{lll}
+\hline \text { Word } & \text { df } & \text { idf } \\
+\hline \text { Romeo } & 1 & 1.57 \\
+\text { salad } & 2 & 1.27 \\
+\text { Falstaff } & 4 & 0.967 \\
+\text { forest } & 12 & 0.489 \\
+\text { battle } & 21 & 0.246 \\
+\text { wit } & 34 & 0.037 \\
+\text { fool } & 36 & 0.012 \\
+\text { good } & 37 & 0 \\
+\text { sweet } & 37 & 0 \\
+\hline
+\end{array}
+$$
+
+Corpus of Shakespeare plays, ranging from extremely informative words that occur in only one play like Romeo, to those that occur in a few like salad or Falstaff, to those that are very common like fool or so common as to be completely non-discriminative since they occur in all 37 plays like good or sweet. (Source: <https://web.stanford.edu/~jurafsky/slp3/14.pdf>)
+
+#### Cosine Similarity
+
+$$
+\operatorname{score}(q, d)=\cos (\mathbf{q}, \mathbf{d})=\frac{\mathbf{q}}{|\mathbf{q}|} \cdot \frac{\mathbf{d}}{|\mathbf{d}|}
+$$
+
+This is equivlaent to the following:
+$$
+\operatorname{score}(q, d)=\sum_{t \in \mathbf{q}} \frac{\operatorname{tf}-\operatorname{idf}(t, q)}{\sqrt{\sum_{q_i \in q} \mathrm{tf}-\mathrm{idf}^2\left(q_i, q\right)}} \cdot \frac{\operatorname{tf}-\operatorname{idf}(t, d)}{\sqrt{\sum_{d_i \in d} \mathrm{tf}-\mathrm{idf}^2\left(d_i, d\right)}}
+$$
+
+$$
+\operatorname{score}(q, d)=\sum_{t \in q} \frac{\mathrm{tf}-\operatorname{idf}(t, d)}{|d|}
+$$
+
+So, for the following Query and provided document, we can calculate if the document is relevant to the query:
+
+| Query      | Documents          | Content               |
+|------------|--------------------|-----------------------|
+| Sweet love | Doc 1              | Sweet sweet nurse! Love? |
+|            | Doc 2              | Sweet sorrow          |
+|            | Doc 3              | How sweet is love?    |
+|            | Doc 4              | Nurse!                |
+
+
+![Source: <https://web.stanford.edu/~jurafsky/slp3/14.pdf>](./imgs/tf_idf_eg2.png)
+
+### Application: Sentiment Analysis 
+
+Nowadays, many economics papers uses the text analysis to do sentiment analysis, which requires VERY BIG DATA. For example, the following paper uses the text analysis to do sentiment analysis:
+
+- Shapiro, A. H., Sudhof, M., & Wilson, D. J. (2022). Measuring news sentiment. Journal of econometrics, 228(2), 221-243.
+
+- Benhima, K., & Cordonier, R. (2022). News, sentiment and capital flows. Journal of International Economics, 137, 103621.
+
+- Chen, C. Y. H., Härdle, W. K., & Klochkov, Y. (2022). Sonic: Social network analysis with influencers and communities. Journal of Econometrics, 228(2), 177-220
+
+- Ash, E., & Hansen, S. (2023). Text algorithms in economics. Annual Review of Economics, 15, 659-688.
+
+**So, we will use Sentiment Analysis as the realzied application of NLP in this lecture.**
+
+---
+
+**Get the Sentiment Score (Basic Method)**
+
+$$
+\text { sentiment }_i=\frac{\# \text { Positive terms }_i-\# \text { Negative terms }_i}{\# \text { Positive terms }_i+\# \text { Negative terms }_i}
+$$
+
+
+
+Let us start with a simple example of sentiment analysis in `R`. 
+
+![Source: Text Mining with R: A Tidy Approach" was written by Julia Silge and David Robinson](./imgs/sentiment_flow.png)
+
+---
+
+**Note:** We are going to only applied the Dictionary/Lexical Methods in this lecture. There are other advanced methods using other machine learning methods, and we are not going to cover them in this lecture. Refer to the following repository for more works:
+
+- <https://github.com/xiamx/awesome-sentiment-analysis>
+
+---
+
+#### `R` Example: Jane Austen's Books-Emma's Sentiment Analysis
+
+This is an exmaple from `Introduction to tidytext` by Julia Silge and David Robinson. The book is available online at <https://www.tidytextmining.com/>.
+
+1. **Loading and Preparing the Data**:
+   ```{r}
+    # Load required libraries
+    library(janeaustenr)
+    library(textdata)
+    library(tidytext)
+    library(dplyr)
+    library(stringr)
+    library(tidyr)
+    library(ggplot2)
+    library(wordcloud)
+    library(reshape2)
+
+   original_books <- austen_books() %>%
+     group_by(book) %>%
+     mutate(line = row_number(),
+            chapter = cumsum(str_detect(text, regex("^chapter [\\divxlc]", ignore_case = TRUE)))) %>%
+     ungroup()
+   ```
+   - This code loads Jane Austen's books using the `austen_books` function.
+   - It groups the data by each book and adds two new columns: `line` for line numbers and `chapter` for chapter numbers.
+   - The `chapter` number is determined using regex to identify chapter headings in the text.
+
+2. **Tokenization**:
+   ```{r}
+   tidy_books <- original_books %>%
+     unnest_tokens(word, text)
+   ```
+   - This part tokenizes the text into words. Each word in the text is separated into its own row, creating a tidy data frame of one-token-per-row.
+
+3. **Cleaning the Data**:
+   ```{r}
+   cleaned_books <- tidy_books %>%
+     anti_join(get_stopwords())
+   ```
+   - This code removes common stop words from the data to focus on more meaningful words.
+
+4. **Word Count**:
+   ```{r}
+   cleaned_books %>%
+     count(word, sort = TRUE)
+   ```
+   - Counts and sorts the words in the cleaned data. This helps in identifying the most common words in the books.
+
+5. **Sentiment Analysis - Positive Words in 'Emma'**:
+   ```{r}
+   positive <- get_sentiments("bing") %>%
+     filter(sentiment == "positive")
+
+   tidy_books %>%
+     filter(book == "Emma") %>%
+     semi_join(positive) %>%
+     count(word, sort = TRUE)
+   ```
+   - Extracts positive words from the Bing lexicon.
+   - Counts the frequency of positive words in the book "Emma."
+
+6. **Sentiment Analysis Across Books**:
+   ```{r}
+   bing <- get_sentiments("bing")
+
+   janeaustensentiment <- tidy_books %>%
+     inner_join(bing) %>%
+     count(book, index = line %/% 80, sentiment) %>%
+     spread(sentiment, n, fill = 0) %>%
+     mutate(sentiment = positive - negative)
+   ```
+   - This section joins the tidy book data with the Bing sentiment lexicon.
+   - It calculates the sentiment scores for sections of text across different books.
+
+7. **Sentiment Visualization**:
+   ```{r}
+   ggplot(janeaustensentiment, aes(index, sentiment, fill = book)) +
+     geom_bar(stat = "identity", show.legend = FALSE) +
+     facet_wrap(~book, ncol = 2, scales = "free_x")
+   ```
+   - Visualizes the sentiment data using a bar chart.
+
+8. **Word Sentiment Counts**:
+   ```{r}
+   bing_word_counts <- tidy_books %>%
+     inner_join(bing) %>%
+     count(word, sentiment, sort = TRUE)
+   ```
+   - Counts the occurrence of words associated with each sentiment.
+
+9. **Sentiment Contribution Visualization**:
+   ```{r}
+   bing_word_counts %>%
+     filter(n > 150) %>%
+     mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
+     mutate(word = reorder(word, n)) %>%
+     ggplot(aes(word, n, fill = sentiment)) +
+     geom_col() +
+     coord_flip() +
+     labs(y = "Contribution to sentiment")
+   ```
+   - Visualizes the contribution of each word to the overall sentiment.
+
+10. **Word Cloud Generation**:
+    ```{r}
+    cleaned_books %>%
+      count(word) %>%
+      with(wordcloud(word, n, max.words = 100))
+    ```
+    - Creates a word cloud from the most frequent words in the cleaned books data.
+
+11. **Comparison Cloud**:
+    ```{r}
+    tidy_books %>%
+      inner_join(bing) %>%
+      count(word, sentiment, sort = TRUE) %>%
+      acast(word ~ sentiment, value.var = "n", fill = 0) %>%
+      comparison.cloud(colors = c("#F8766D", "#00BFC4"),
+                       max.words = 100)
+    ```
+    - Generates a comparison cloud to visually compare the frequency of words associated with different sentiments.
+    - Negates the count for negative sentiment words for visualization purposes.
+    - Reorders words based on their count.
+    - Creates a horizontal bar plot with `ggplot2` showing the contribution of each word to the overall sentiment, distinguishing between positive and negative sentiments.
+
+
+
+#### `Python` Example: `vaderSentiment` for social media sentiment analysis
+
+- `vaderSentiment` is a Python library that is optimized for social media sentiment analysis. It uses a lexicon of words that are labeled according to their semantic orientation as either positive or negative. It also incorporates rules for handling sentiment intensity expressed through punctuation, capitalization, degree modifiers, and conjunctions.
+
+- <https://github.com/cjhutto/vaderSentiment/tree/master>
+
+- Install it: `pip install vaderSentiment`
+
+```{python}
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
+# --- examples -------
+sentences = ["VADER is smart, handsome, and funny.",  # positive sentence example
+             "VADER is smart, handsome, and funny!",  # punctuation emphasis handled correctly (sentiment intensity adjusted)
+             "VADER is very smart, handsome, and funny.", # booster words handled correctly (sentiment intensity adjusted)
+             "VADER is VERY SMART, handsome, and FUNNY.",  # emphasis for ALLCAPS handled
+             "VADER is VERY SMART, handsome, and FUNNY!!!", # combination of signals - VADER appropriately adjusts intensity
+             "VADER is VERY SMART, uber handsome, and FRIGGIN FUNNY!!!", # booster words & punctuation make this close to ceiling for score
+             "VADER is not smart, handsome, nor funny.",  # negation sentence example
+             "The book was good.",  # positive sentence
+             "At least it isn't a horrible book.",  # negated negative sentence with contraction
+             "The book was only kind of good.", # qualified positive sentence is handled correctly (intensity adjusted)
+             "The plot was good, but the characters are uncompelling and the dialog is not great.", # mixed negation sentence
+             "Today SUX!",  # negative slang with capitalization emphasis
+             "Today only kinda sux! But I'll get by, lol", # mixed sentiment example with slang and constrastive conjunction "but"
+             "Make sure you :) or :D today!",  # emoticons handled
+             "Catch utf-8 emoji such as such as 💘 and 💋 and 😁",  # emojis handled
+             "Not bad at all"  # Capitalized negation
+             ]
+
+analyzer = SentimentIntensityAnalyzer()
+for sentence in sentences:
+    vs = analyzer.polarity_scores(sentence)
+    print("{:-<65} {}".format(sentence, str(vs)))
+
+```
+
+
+- **Importing VADER**: The `SentimentIntensityAnalyzer` class from the `vaderSentiment` package is imported.
+- **Sentences for Analysis**: A list of sentences is defined, showcasing different scenarios like positive/negative sentiments, emphasis through punctuation and capitalization, booster words, negations, slang, and emoticons.
+- **Analyzing Sentiment**: The `SentimentIntensityAnalyzer` is used to compute a `polarity_scores` dictionary for each sentence. This dictionary contains four scores: 'neg' (negative), 'neu' (neutral), 'pos' (positive), and 'compound' (a normalized, composite score).
+- **Printing Results**: For each sentence, the sentiment scores are printed alongside the text.
+
+VADER uses a combination of a lexicon (a list of lexical features, e.g., words, emoticons) which are labeled according to their semantic orientation as either positive or negative. VADER not only tells about the Positivity and Negativity score but also tells us about how positive or negative a sentiment is.
+
+VADER analyzes sentiments primarily based on certain key aspects:
+
+- **Lexicon**: Words are scored for their positive or negative sentiment.
+- **Rules**: Incorporates grammatical and syntactical rules like capitalization, degree modifiers (e.g., "very"), and contrastive conjunctions (e.g., "but").
+- **Emoticons and Emoji**: Interprets commonly used emoticons and emoji, which are significant in social media text.
+- **Punctuation**: Recognizes punctuation marks' role in emphasizing sentiment intensity.
+
+**Improvement from Jane Austen Example**:
+In the Jane Austen books example (using 'bing' lexicon), the sentiment analysis is mainly based on the presence of words categorized as positive or negative. This approach might not capture the nuances of sentiment expressed through modern slang, emoticons, emoji, punctuation, and capitalization, which are common in online communication.
+
+VADER, on the other hand, is designed to understand the nuances of social media language. It can interpret a wider range of expressions (like "SUX" or ":-)") and modifiers (like "uber" or ALLCAPS) that significantly impact sentiment intensity. This makes VADER particularly suitable for analyzing text from platforms like Twitter, where such expressions are prevalent.
+
+#### Inclass Exercise:
+
+- Use ChatGPT to generate texts for you to test how VADER works:
+
+```{python}
+
+```
+- Demo, and Discussion
+
+
+# Summary Today and For Next Lecture
+
+This lecture is designed to refresh your memory on `R` about text analysis, and using `R` in `VS Code` to apply NLP method like sentiment analysis. 
+
+For next lecture, we will talk about Large Language Models and how can we use it in Economic Research. 
+
+# References
+
+- Text Mining with R: A Tidy Approach" was written by Julia Silge and David Robinson

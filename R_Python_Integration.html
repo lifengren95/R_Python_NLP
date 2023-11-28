@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Lifeng Ren">
+<meta name="dcterms.date" content="2023-11-27">
+
+<title>R and Python Integration for Natural Language Processing (NLP)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="R_Python_Integration_files/libs/clipboard/clipboard.min.js"></script>
+<script src="R_Python_Integration_files/libs/quarto-html/quarto.js"></script>
+<script src="R_Python_Integration_files/libs/quarto-html/popper.min.js"></script>
+<script src="R_Python_Integration_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="R_Python_Integration_files/libs/quarto-html/anchor.min.js"></script>
+<link href="R_Python_Integration_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="R_Python_Integration_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="R_Python_Integration_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="R_Python_Integration_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="R_Python_Integration_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#lecture-agenda" id="toc-lecture-agenda" class="nav-link active" data-scroll-target="#lecture-agenda"><span class="header-section-number">1</span> Lecture Agenda</a></li>
+  <li><a href="#r-in-vs-code" id="toc-r-in-vs-code" class="nav-link" data-scroll-target="#r-in-vs-code"><span class="header-section-number">2</span> R in VS Code</a>
+  <ul class="collapse">
+  <li><a href="#install-r-in-vs-code" id="toc-install-r-in-vs-code" class="nav-link" data-scroll-target="#install-r-in-vs-code"><span class="header-section-number">2.1</span> Install R in <code>VS Code</code></a>
+  <ul class="collapse">
+  <li><a href="#install-r-extension-in-vs-code" id="toc-install-r-extension-in-vs-code" class="nav-link" data-scroll-target="#install-r-extension-in-vs-code"><span class="header-section-number">2.1.1</span> Install <code>R</code> extension in <code>VS Code</code></a></li>
+  <li><a href="#install-radian" id="toc-install-radian" class="nav-link" data-scroll-target="#install-radian"><span class="header-section-number">2.1.2</span> Install <code>radian</code></a></li>
+  <li><a href="#launch-radian-and-install-languageserver" id="toc-launch-radian-and-install-languageserver" class="nav-link" data-scroll-target="#launch-radian-and-install-languageserver"><span class="header-section-number">2.1.3</span> Launch <code>radian</code> and install <code>languageserver</code></a></li>
+  </ul></li>
+  <li><a href="#get-familiar-with-r-in-vs-code" id="toc-get-familiar-with-r-in-vs-code" class="nav-link" data-scroll-target="#get-familiar-with-r-in-vs-code"><span class="header-section-number">2.2</span> Get Familiar with <code>R</code> in <code>VS Code</code></a></li>
+  <li><a href="#switch-gear-to-vs-code" id="toc-switch-gear-to-vs-code" class="nav-link" data-scroll-target="#switch-gear-to-vs-code"><span class="header-section-number">2.3</span> Switch Gear to <code>VS Code</code></a></li>
+  </ul></li>
+  <li><a href="#introduction-to-natural-language-processing-nlp" id="toc-introduction-to-natural-language-processing-nlp" class="nav-link" data-scroll-target="#introduction-to-natural-language-processing-nlp"><span class="header-section-number">3</span> Introduction to Natural Language Processing (NLP)</a>
+  <ul class="collapse">
+  <li><a href="#foundamental-concepts-in-nlp" id="toc-foundamental-concepts-in-nlp" class="nav-link" data-scroll-target="#foundamental-concepts-in-nlp"><span class="header-section-number">3.1</span> Foundamental Concepts in NLP</a></li>
+  <li><a href="#very-very-basic-nlp-application-in-r-and-python" id="toc-very-very-basic-nlp-application-in-r-and-python" class="nav-link" data-scroll-target="#very-very-basic-nlp-application-in-r-and-python"><span class="header-section-number">3.2</span> Very Very Basic NLP Application in <code>R</code> and <code>Python</code></a>
+  <ul class="collapse">
+  <li><a href="#some-rules-and-math" id="toc-some-rules-and-math" class="nav-link" data-scroll-target="#some-rules-and-math"><span class="header-section-number">3.2.1</span> Some Rules and Math</a></li>
+  <li><a href="#application-sentiment-analysis" id="toc-application-sentiment-analysis" class="nav-link" data-scroll-target="#application-sentiment-analysis"><span class="header-section-number">3.2.2</span> Application: Sentiment Analysis</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#summary-today-and-for-next-lecture" id="toc-summary-today-and-for-next-lecture" class="nav-link" data-scroll-target="#summary-today-and-for-next-lecture"><span class="header-section-number">4</span> Summary Today and For Next Lecture</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">5</span> References</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="R_Python_Integration.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">R and Python Integration for Natural Language Processing (NLP)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Lifeng Ren </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 27, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Before we start learning Large Language Models (LLM), let’s use this lecture to get our feet wet for Natural Language Processing (NLP) in both <code>R</code> and <code>Python</code>. This will include</p>
+<section id="lecture-agenda" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Lecture Agenda</h1>
+<p>In this lecture, we will cover the following topics:</p>
+<ul>
+<li><p><code>R</code> in <code>VS Code</code></p>
+<ul>
+<li>Install <code>R</code> in <code>VS Code</code></li>
+<li>Get familiar with <code>R</code> in <code>VS Code</code></li>
+</ul></li>
+<li><p>Natural Language Processing (NLP) in <code>R</code> and <code>Python</code></p></li>
+<li><p>Next Lecture: Large Language Models (LLM) with applications in Economics</p></li>
+</ul>
+</section>
+<section id="r-in-vs-code" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> R in VS Code</h1>
+<section id="install-r-in-vs-code" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="install-r-in-vs-code"><span class="header-section-number">2.1</span> Install R in <code>VS Code</code></h2>
+<ul>
+<li>I assume you all already installed <code>R</code> in your computer. If not, please go to <a href="https://cran.rstudio.com">this website</a> and download the latest version of <code>R</code> and install it in your computer.</li>
+</ul>
+<section id="install-r-extension-in-vs-code" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="install-r-extension-in-vs-code"><span class="header-section-number">2.1.1</span> Install <code>R</code> extension in <code>VS Code</code></h3>
+<p>Go to the VS Code extension marketplace and search for <code>R</code> and install the extension.</p>
+<p><img src="./imgs/vscode_extension_r.png" class="img-fluid"></p>
+</section>
+<section id="install-radian" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="install-radian"><span class="header-section-number">2.1.2</span> Install <code>radian</code></h3>
+<ul>
+<li>In your <code>8222</code> python environment, install pacakge <code>radian</code> using the following command:</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> activate 8222env3</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mamba</span> install <span class="at">-c</span> conda-forge radian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Or, you can use <code>pip</code> to install <code>radian</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install radian</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><p>To Run <code>radian</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">radian</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>To exit <code>radian</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="fu">q()</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+<section id="launch-radian-and-install-languageserver" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="launch-radian-and-install-languageserver"><span class="header-section-number">2.1.3</span> Launch <code>radian</code> and install <code>languageserver</code></h3>
+<p>In the <code>radian</code> console, run the following command to install <code>languageserver</code>, say <code>yes</code>, <code>1</code>, and <code>yes</code> to the following questions.</p>
+<p><img src="./imgs/languageserver_install_1.png" class="img-fluid"> <img src="./imgs/languageserver_install_2.png" class="img-fluid"> <img src="./imgs/languageserver_install_3.png" class="img-fluid"></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"languageserversetup"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>languageserversetup<span class="sc">::</span><span class="fu">languageserver_install</span>()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>languageserversetup<span class="sc">::</span><span class="fu">languageserver_add_to_rprofile</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="get-familiar-with-r-in-vs-code" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="get-familiar-with-r-in-vs-code"><span class="header-section-number">2.2</span> Get Familiar with <code>R</code> in <code>VS Code</code></h2>
+<ul>
+<li><code>Help</code> Pages <img src="./imgs/help_pages.png" class="img-fluid"> <img src="./imgs/help_pages_2.png" class="img-fluid"></li>
+<li>New R terminal</li>
+</ul>
+<p><img src="./imgs/generate_r_terminal.png" class="img-fluid"></p>
+</section>
+<section id="switch-gear-to-vs-code" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="switch-gear-to-vs-code"><span class="header-section-number">2.3</span> Switch Gear to <code>VS Code</code></h2>
+<ul>
+<li>Run selected R code in <code>VS Code</code>
+<ul>
+<li>Windows: <code>Ctrl + Enter</code> to run selected code</li>
+<li>Mac: <code>Command + Enter</code> to run selected code</li>
+</ul></li>
+<li>Run all R code in <code>VS Code</code>:
+<ul>
+<li>Windows: <code>Ctrl + Shift + S</code> to run all code</li>
+<li>Mac: <code>Command + Shift + S</code> to run all code</li>
+</ul></li>
+</ul>
+<hr>
+<p>I assume you all have the background of <code>R</code>, and I assume the first half of APEC 8222 taught you some text analysis in <code>R</code>, so I will start using <code>R</code> to do some NLP application, and gradually switch to <code>Python</code> to do the same thing.</p>
+<p>For more information on how <code>R</code> and <code>Python</code> packages are equivalent, please refer to this website:</p>
+<ul>
+<li><a href="https://aeturrell.github.io/coding-for-economists/coming-from-r.html" class="uri">https://aeturrell.github.io/coding-for-economists/coming-from-r.html</a></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="introduction-to-natural-language-processing-nlp" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Introduction to Natural Language Processing (NLP)</h1>
+<p>NLP is one of the major branches of Artificial Intelligence (AI). The following table shows each branch with a brief description and examples of applications:</p>
+<table class="table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 24%">
+<col style="width: 49%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Branch of AI</th>
+<th>Description</th>
+<th>Examples of Applications</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Machine Learning (ML)</strong></td>
+<td>Algorithms that enable computers to learn from and make predictions or decisions based on data.</td>
+<td>- Recommendation systems<br>- Self-driving cars<br>- Predictive analytics</td>
+</tr>
+<tr class="even">
+<td><strong>Natural Language Processing (NLP)</strong></td>
+<td>Focuses on the interaction between computers and human language, enabling understanding, interpretation, and generation of human language.</td>
+<td>- Speech recognition<br>- Language translation<br>- Sentiment analysis</td>
+</tr>
+<tr class="odd">
+<td><strong>Computer Vision</strong></td>
+<td>Deals with how computers can gain high-level understanding from digital images or videos.</td>
+<td>- Facial recognition systems<br>- Medical image analysis<br>- Autonomous vehicle navigation</td>
+</tr>
+<tr class="even">
+<td><strong>Robotics</strong></td>
+<td>Involves designing and building robots that perform tasks, often using AI for perception and decision-making.</td>
+<td>- Industrial robots for manufacturing<br>- Surgical robots in healthcare<br>- Exploration robots in space missions</td>
+</tr>
+<tr class="odd">
+<td><strong>Expert Systems</strong></td>
+<td>AI systems that simulate the decision-making ability of a human expert in specific domains.</td>
+<td>- Medical diagnosis systems<br>- Financial investment advising<br>- Weather prediction models</td>
+</tr>
+<tr class="even">
+<td><strong>Neural Networks and Deep Learning</strong></td>
+<td>A subset of ML based on artificial neural networks, particularly useful for handling large amounts of unstructured data.</td>
+<td>- Voice recognition and assistants<br>- Advanced game-playing AI (like chess and Go)<br>- Enhanced medical diagnoses</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>This table provides a concise overview of the major branches of AI, their core functionalities, and examples of where they are applied in various industries and domains. Note that there will be overlap between these branches, and some applications may use multiple branches of AI.</p></li>
+<li><p>The famous transformer model, is based on a paper called <a href="https://arxiv.org/abs/1706.03762">Attention is All You Need</a>, which was published in 2017 by Google. The transformer model is a type of neural network architecture that is based on the concept of attention. The transformer model is the foundation of many of the most advanced NLP models today, including BERT, GPT-3, and T5.</p>
+<ul>
+<li><p>It was designed by solving a translation problem, but it can be used for many other NLP tasks, including text classification, question answering, and summarization.</p></li>
+<li><p>We will talk more about it in the next lecture.</p></li>
+</ul></li>
+</ul>
+<section id="foundamental-concepts-in-nlp" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="foundamental-concepts-in-nlp"><span class="header-section-number">3.1</span> Foundamental Concepts in NLP</h2>
+<p>Here’s a table that defines each NLP term, along with an example for each:</p>
+<table class="table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 44%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Term</th>
+<th>Definition</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Type</strong></td>
+<td>A distinct element of vocabulary in a text, representing a unique word.</td>
+<td>In “cat, dog, dog”, “cat” and “dog” are two types.</td>
+</tr>
+<tr class="even">
+<td><strong>Token</strong></td>
+<td>An instance of a sequence of characters in a text, often corresponding to a word or symbol.</td>
+<td>In “I love AI”, “I”, “love”, and “AI” are tokens.</td>
+</tr>
+<tr class="odd">
+<td><strong>Term</strong></td>
+<td>A word or phrase used in a text or a collection of texts (corpus).</td>
+<td>“Artificial intelligence” is a term in computer science texts.</td>
+</tr>
+<tr class="even">
+<td><strong>Document</strong></td>
+<td>A single text or record in a dataset, like an article, an email, or a webpage.</td>
+<td>An individual Wikipedia article is a document.</td>
+</tr>
+<tr class="odd">
+<td><strong>Corpus</strong></td>
+<td>A collection of documents, often used as a dataset in NLP.</td>
+<td>A collection of all articles from a news website forms a corpus.</td>
+</tr>
+<tr class="even">
+<td><strong>Bag of Words (BOW)</strong></td>
+<td>A model treating text as a collection of words without considering syntax or word order but maintaining frequency.</td>
+<td>In “cat and dog”, BOW represents two words: “cat” (1), “dog” (1).</td>
+</tr>
+<tr class="odd">
+<td><strong>Term Frequency (TF)</strong></td>
+<td>The frequency of a term in a document.</td>
+<td>In a document with 100 words, where the word “AI” appears 5 times, TF for “AI” is 5/100.</td>
+</tr>
+<tr class="even">
+<td><strong>Inverse Document Frequency (IDF)</strong></td>
+<td>A measure of how much information a term provides by considering how common or rare it is across all documents.</td>
+<td>“AI” appearing in 1 out of 1000 documents has higher IDF than if it appears in 100 out of 1000.</td>
+</tr>
+<tr class="odd">
+<td><strong>TF-IDF</strong></td>
+<td>A statistical measure used to evaluate the importance of a word to a document in a corpus; combines TF and IDF.</td>
+<td>High TF-IDF for “neural network” in a document indicates its importance in that document within the given corpus.</td>
+</tr>
+<tr class="even">
+<td><strong>Stop Words</strong></td>
+<td>Commonly used words in a language that are filtered out before processing text.</td>
+<td>Words like “is”, “and”, “the” are often considered stop words.</td>
+</tr>
+<tr class="odd">
+<td><strong>Stemming</strong></td>
+<td>The process of reducing words to their base or root form, often crudely by chopping off word endings.</td>
+<td>“Running”, “runner” stem to “run”.</td>
+</tr>
+<tr class="even">
+<td><strong>Lemmatization</strong></td>
+<td>Similar to stemming but more sophisticated, reducing words to their base or dictionary form.</td>
+<td>“Better” is lemmatized to “good”.</td>
+</tr>
+<tr class="odd">
+<td><strong>Part of Speech (POS) Tagging</strong></td>
+<td>The process of marking up a word in a text as corresponding to a particular part of speech.</td>
+<td>In “The quick brown fox”, “quick” is tagged as an adjective.</td>
+</tr>
+<tr class="even">
+<td><strong>Named Entity Recognition (NER)</strong></td>
+<td>The process of identifying and classifying key information (entities) in text into predefined categories.</td>
+<td>In “Apple Inc.&nbsp;was founded by Steve Jobs”, “Apple Inc.” is recognized as an organization.</td>
+</tr>
+<tr class="odd">
+<td><strong>Word Embedding</strong></td>
+<td>A technique in NLP where words or phrases are encoded as real-valued vectors in a predefined vector space.</td>
+<td>Each word in a corpus is represented as a vector in a multi-dimensional space.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="very-very-basic-nlp-application-in-r-and-python" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="very-very-basic-nlp-application-in-r-and-python"><span class="header-section-number">3.2</span> Very Very Basic NLP Application in <code>R</code> and <code>Python</code></h2>
+<p>NLP has many applications, including but not limited to: - Document classification - Sentiment analysis - Author identification - Question answering - Topic modeling</p>
+<section id="some-rules-and-math" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="some-rules-and-math"><span class="header-section-number">3.2.1</span> Some Rules and Math</h3>
+<section id="zipfs-law" class="level4" data-number="3.2.1.1">
+<h4 data-number="3.2.1.1" class="anchored" data-anchor-id="zipfs-law"><span class="header-section-number">3.2.1.1</span> Zipf’s Law</h4>
+<p><span class="math display">\[
+\text { word frequency } \propto \frac{1}{\text { word rank }} \text {. }
+\]</span> It is usually found that the most common word occurs approximately twice as often as the next common one, three imes as often as the third most common, and so on.</p>
+</section>
+<section id="tf-idf" class="level4" data-number="3.2.1.2">
+<h4 data-number="3.2.1.2" class="anchored" data-anchor-id="tf-idf"><span class="header-section-number">3.2.1.2</span> TF-IDF</h4>
+<p><strong>Term frequency</strong>, <span class="math inline">\(\operatorname{tf}(t, d)\)</span>, is the relative frequency of term <span class="math inline">\(t\)</span> within document <span class="math inline">\(d\)</span>, <span class="math display">\[
+\operatorname{tf}(t, d)=\frac{f_{t, d}}{\sum_{t^{\prime} \in d} f_{t^{\prime}, d}},
+\]</span> where <span class="math inline">\(f_{t, d}\)</span> is the raw count of a term in a document, i.e., the number of times that term <span class="math inline">\(t\)</span> occurs in document <span class="math inline">\(d\)</span>. Note the denominator is simply the total number of terms in document <span class="math inline">\(d\)</span> (counting each occurrence of the same term separately).</p>
+<p><strong>Inverse Document Frequency</strong> <span class="math display">\[
+\operatorname{idf}(t, D)=\log \frac{N}{|\{d \in D: t \in d\}|} = \log _{10}(\operatorname{count}(t, d)+1)
+\]</span> with</p>
+<ul>
+<li><span class="math inline">\(N\)</span> : total number of documents in the corpus <span class="math inline">\(N=|D|\)</span></li>
+<li><span class="math inline">\(|\{d \in D: t \in d\}|\)</span> : number of documents where the term <span class="math inline">\(t\)</span> appears (i.e., <span class="math inline">\(\operatorname{tf}(t, d) \neq 0\)</span> ).</li>
+</ul>
+<p><span class="math display">\[
+\operatorname{tfidf}(t, d, D)=\operatorname{tf}(t, d) \cdot \operatorname{idf}(t, D) = \log _{10} \frac{N}{\mathrm{df}_t}
+\]</span></p>
+<p><strong>Example</strong>: <span class="math display">\[
+\begin{array}{lll}
+\hline \text { Word } &amp; \text { df } &amp; \text { idf } \\
+\hline \text { Romeo } &amp; 1 &amp; 1.57 \\
+\text { salad } &amp; 2 &amp; 1.27 \\
+\text { Falstaff } &amp; 4 &amp; 0.967 \\
+\text { forest } &amp; 12 &amp; 0.489 \\
+\text { battle } &amp; 21 &amp; 0.246 \\
+\text { wit } &amp; 34 &amp; 0.037 \\
+\text { fool } &amp; 36 &amp; 0.012 \\
+\text { good } &amp; 37 &amp; 0 \\
+\text { sweet } &amp; 37 &amp; 0 \\
+\hline
+\end{array}
+\]</span></p>
+<p>Corpus of Shakespeare plays, ranging from extremely informative words that occur in only one play like Romeo, to those that occur in a few like salad or Falstaff, to those that are very common like fool or so common as to be completely non-discriminative since they occur in all 37 plays like good or sweet. (Source: <a href="https://web.stanford.edu/~jurafsky/slp3/14.pdf" class="uri">https://web.stanford.edu/~jurafsky/slp3/14.pdf</a>)</p>
+</section>
+<section id="cosine-similarity" class="level4" data-number="3.2.1.3">
+<h4 data-number="3.2.1.3" class="anchored" data-anchor-id="cosine-similarity"><span class="header-section-number">3.2.1.3</span> Cosine Similarity</h4>
+<p><span class="math display">\[
+\operatorname{score}(q, d)=\cos (\mathbf{q}, \mathbf{d})=\frac{\mathbf{q}}{|\mathbf{q}|} \cdot \frac{\mathbf{d}}{|\mathbf{d}|}
+\]</span></p>
+<p>This is equivlaent to the following: <span class="math display">\[
+\operatorname{score}(q, d)=\sum_{t \in \mathbf{q}} \frac{\operatorname{tf}-\operatorname{idf}(t, q)}{\sqrt{\sum_{q_i \in q} \mathrm{tf}-\mathrm{idf}^2\left(q_i, q\right)}} \cdot \frac{\operatorname{tf}-\operatorname{idf}(t, d)}{\sqrt{\sum_{d_i \in d} \mathrm{tf}-\mathrm{idf}^2\left(d_i, d\right)}}
+\]</span></p>
+<p><span class="math display">\[
+\operatorname{score}(q, d)=\sum_{t \in q} \frac{\mathrm{tf}-\operatorname{idf}(t, d)}{|d|}
+\]</span></p>
+<p>So, for the following Query and provided document, we can calculate if the document is relevant to the query:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Query</th>
+<th>Documents</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sweet love</td>
+<td>Doc 1</td>
+<td>Sweet sweet nurse! Love?</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Doc 2</td>
+<td>Sweet sorrow</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Doc 3</td>
+<td>How sweet is love?</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Doc 4</td>
+<td>Nurse!</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./imgs/tf_idf_eg2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Source: <a href="https://web.stanford.edu/~jurafsky/slp3/14.pdf" class="uri">https://web.stanford.edu/~jurafsky/slp3/14.pdf</a></figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="application-sentiment-analysis" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="application-sentiment-analysis"><span class="header-section-number">3.2.2</span> Application: Sentiment Analysis</h3>
+<p>Nowadays, many economics papers uses the text analysis to do sentiment analysis, which requires VERY BIG DATA. For example, the following paper uses the text analysis to do sentiment analysis:</p>
+<ul>
+<li><p>Shapiro, A. H., Sudhof, M., &amp; Wilson, D. J. (2022). Measuring news sentiment. Journal of econometrics, 228(2), 221-243.</p></li>
+<li><p>Benhima, K., &amp; Cordonier, R. (2022). News, sentiment and capital flows. Journal of International Economics, 137, 103621.</p></li>
+<li><p>Chen, C. Y. H., Härdle, W. K., &amp; Klochkov, Y. (2022). Sonic: Social network analysis with influencers and communities. Journal of Econometrics, 228(2), 177-220</p></li>
+<li><p>Ash, E., &amp; Hansen, S. (2023). Text algorithms in economics. Annual Review of Economics, 15, 659-688.</p></li>
+</ul>
+<p><strong>So, we will use Sentiment Analysis as the realzied application of NLP in this lecture.</strong></p>
+<hr>
+<p><strong>Get the Sentiment Score (Basic Method)</strong></p>
+<p><span class="math display">\[
+\text { sentiment }_i=\frac{\# \text { Positive terms }_i-\# \text { Negative terms }_i}{\# \text { Positive terms }_i+\# \text { Negative terms }_i}
+\]</span></p>
+<p>Let us start with a simple example of sentiment analysis in <code>R</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./imgs/sentiment_flow.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Source: Text Mining with R: A Tidy Approach” was written by Julia Silge and David Robinson</figcaption>
+</figure>
+</div>
+<hr>
+<p><strong>Note:</strong> We are going to only applied the Dictionary/Lexical Methods in this lecture. There are other advanced methods using other machine learning methods, and we are not going to cover them in this lecture. Refer to the following repository for more works:</p>
+<ul>
+<li><a href="https://github.com/xiamx/awesome-sentiment-analysis" class="uri">https://github.com/xiamx/awesome-sentiment-analysis</a></li>
+</ul>
+<hr>
+<section id="r-example-jane-austens-books-emmas-sentiment-analysis" class="level4" data-number="3.2.2.1">
+<h4 data-number="3.2.2.1" class="anchored" data-anchor-id="r-example-jane-austens-books-emmas-sentiment-analysis"><span class="header-section-number">3.2.2.1</span> <code>R</code> Example: Jane Austen’s Books-Emma’s Sentiment Analysis</h4>
+<p>This is an exmaple from <code>Introduction to tidytext</code> by Julia Silge and David Robinson. The book is available online at <a href="https://www.tidytextmining.com/" class="uri">https://www.tidytextmining.com/</a>.</p>
+<ol type="1">
+<li><p><strong>Loading and Preparing the Data</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Load required libraries</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(janeaustenr)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(textdata)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(tidytext)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(stringr)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(tidyr)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(wordcloud)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: RColorBrewer</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(reshape2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'reshape2'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:tidyr':
+
+    smiths</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>original_books <span class="ot">&lt;-</span> <span class="fu">austen_books</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(book) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">line =</span> <span class="fu">row_number</span>(),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">chapter =</span> <span class="fu">cumsum</span>(<span class="fu">str_detect</span>(text, <span class="fu">regex</span>(<span class="st">"^chapter [</span><span class="sc">\\</span><span class="st">divxlc]"</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)))) <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>This code loads Jane Austen’s books using the <code>austen_books</code> function.</li>
+<li>It groups the data by each book and adds two new columns: <code>line</code> for line numbers and <code>chapter</code> for chapter numbers.</li>
+<li>The <code>chapter</code> number is determined using regex to identify chapter headings in the text.</li>
+</ul></li>
+<li><p><strong>Tokenization</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tidy_books <span class="ot">&lt;-</span> original_books <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(word, text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>This part tokenizes the text into words. Each word in the text is separated into its own row, creating a tidy data frame of one-token-per-row.</li>
+</ul></li>
+<li><p><strong>Cleaning the Data</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>cleaned_books <span class="ot">&lt;-</span> tidy_books <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(<span class="fu">get_stopwords</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(word)`</code></pre>
+</div>
+</div>
+<ul>
+<li>This code removes common stop words from the data to focus on more meaningful words.</li>
+</ul></li>
+<li><p><strong>Word Count</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>cleaned_books <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(word, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14,375 × 2
+   word      n
+   &lt;chr&gt; &lt;int&gt;
+ 1 mr     3015
+ 2 mrs    2446
+ 3 must   2071
+ 4 said   2041
+ 5 much   1935
+ 6 miss   1855
+ 7 one    1831
+ 8 well   1523
+ 9 every  1456
+10 think  1440
+# ℹ 14,365 more rows</code></pre>
+</div>
+</div>
+<ul>
+<li>Counts and sorts the words in the cleaned data. This helps in identifying the most common words in the books.</li>
+</ul></li>
+<li><p><strong>Sentiment Analysis - Positive Words in ‘Emma’</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>positive <span class="ot">&lt;-</span> <span class="fu">get_sentiments</span>(<span class="st">"bing"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sentiment <span class="sc">==</span> <span class="st">"positive"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>tidy_books <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(book <span class="sc">==</span> <span class="st">"Emma"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">semi_join</span>(positive) <span class="sc">%&gt;%</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(word, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(word)`</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 668 × 2
+   word         n
+   &lt;chr&gt;    &lt;int&gt;
+ 1 well       401
+ 2 good       359
+ 3 great      264
+ 4 like       200
+ 5 better     173
+ 6 enough     129
+ 7 happy      125
+ 8 love       117
+ 9 pleasure   115
+10 right       92
+# ℹ 658 more rows</code></pre>
+</div>
+</div>
+<ul>
+<li>Extracts positive words from the Bing lexicon.</li>
+<li>Counts the frequency of positive words in the book “Emma.”</li>
+</ul></li>
+<li><p><strong>Sentiment Analysis Across Books</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>bing <span class="ot">&lt;-</span> <span class="fu">get_sentiments</span>(<span class="st">"bing"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>janeaustensentiment <span class="ot">&lt;-</span> tidy_books <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(bing) <span class="sc">%&gt;%</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(book, <span class="at">index =</span> line <span class="sc">%/%</span> <span class="dv">80</span>, sentiment) <span class="sc">%&gt;%</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(sentiment, n, <span class="at">fill =</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sentiment =</span> positive <span class="sc">-</span> negative)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(word)`</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in inner_join(., bing): Detected an unexpected many-to-many relationship between `x` and `y`.
+ℹ Row 435434 of `x` matches multiple rows in `y`.
+ℹ Row 5051 of `y` matches multiple rows in `x`.
+ℹ If a many-to-many relationship is expected, set `relationship =
+  "many-to-many"` to silence this warning.</code></pre>
+</div>
+</div>
+<ul>
+<li>This section joins the tidy book data with the Bing sentiment lexicon.</li>
+<li>It calculates the sentiment scores for sections of text across different books.</li>
+</ul></li>
+<li><p><strong>Sentiment Visualization</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(janeaustensentiment, <span class="fu">aes</span>(index, sentiment, <span class="at">fill =</span> book)) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>book, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scales =</span> <span class="st">"free_x"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="R_Python_Integration_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ul>
+<li>Visualizes the sentiment data using a bar chart.</li>
+</ul></li>
+<li><p><strong>Word Sentiment Counts</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>bing_word_counts <span class="ot">&lt;-</span> tidy_books <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(bing) <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(word, sentiment, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(word)`</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in inner_join(., bing): Detected an unexpected many-to-many relationship between `x` and `y`.
+ℹ Row 435434 of `x` matches multiple rows in `y`.
+ℹ Row 5051 of `y` matches multiple rows in `x`.
+ℹ If a many-to-many relationship is expected, set `relationship =
+  "many-to-many"` to silence this warning.</code></pre>
+</div>
+</div>
+<ul>
+<li>Counts the occurrence of words associated with each sentiment.</li>
+</ul></li>
+<li><p><strong>Sentiment Contribution Visualization</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>bing_word_counts <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">150</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n =</span> <span class="fu">ifelse</span>(sentiment <span class="sc">==</span> <span class="st">"negative"</span>, <span class="sc">-</span>n, n)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">word =</span> <span class="fu">reorder</span>(word, n)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(word, n, <span class="at">fill =</span> sentiment)) <span class="sc">+</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Contribution to sentiment"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="R_Python_Integration_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ul>
+<li>Visualizes the contribution of each word to the overall sentiment.</li>
+</ul></li>
+<li><p><strong>Word Cloud Generation</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>cleaned_books <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(word) <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with</span>(<span class="fu">wordcloud</span>(word, n, <span class="at">max.words =</span> <span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="R_Python_Integration_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ul>
+<li>Creates a word cloud from the most frequent words in the cleaned books data.</li>
+</ul></li>
+<li><p><strong>Comparison Cloud</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>tidy_books <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(bing) <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(word, sentiment, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">acast</span>(word <span class="sc">~</span> sentiment, <span class="at">value.var =</span> <span class="st">"n"</span>, <span class="at">fill =</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">comparison.cloud</span>(<span class="at">colors =</span> <span class="fu">c</span>(<span class="st">"#F8766D"</span>, <span class="st">"#00BFC4"</span>),</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">max.words =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(word)`</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in inner_join(., bing): Detected an unexpected many-to-many relationship between `x` and `y`.
+ℹ Row 435434 of `x` matches multiple rows in `y`.
+ℹ Row 5051 of `y` matches multiple rows in `x`.
+ℹ If a many-to-many relationship is expected, set `relationship =
+  "many-to-many"` to silence this warning.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="R_Python_Integration_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ul>
+<li>Generates a comparison cloud to visually compare the frequency of words associated with different sentiments.</li>
+<li>Negates the count for negative sentiment words for visualization purposes.</li>
+<li>Reorders words based on their count.</li>
+<li>Creates a horizontal bar plot with <code>ggplot2</code> showing the contribution of each word to the overall sentiment, distinguishing between positive and negative sentiments.</li>
+</ul></li>
+</ol>
+</section>
+<section id="python-example-vadersentiment-for-social-media-sentiment-analysis" class="level4" data-number="3.2.2.2">
+<h4 data-number="3.2.2.2" class="anchored" data-anchor-id="python-example-vadersentiment-for-social-media-sentiment-analysis"><span class="header-section-number">3.2.2.2</span> <code>Python</code> Example: <code>vaderSentiment</code> for social media sentiment analysis</h4>
+<ul>
+<li><p><code>vaderSentiment</code> is a Python library that is optimized for social media sentiment analysis. It uses a lexicon of words that are labeled according to their semantic orientation as either positive or negative. It also incorporates rules for handling sentiment intensity expressed through punctuation, capitalization, degree modifiers, and conjunctions.</p></li>
+<li><p><a href="https://github.com/cjhutto/vaderSentiment/tree/master" class="uri">https://github.com/cjhutto/vaderSentiment/tree/master</a></p></li>
+<li><p>Install it: <code>pip install vaderSentiment</code></p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> vaderSentiment.vaderSentiment <span class="im">import</span> SentimentIntensityAnalyzer</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># --- examples -------</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>sentences <span class="op">=</span> [<span class="st">"VADER is smart, handsome, and funny."</span>,  <span class="co"># positive sentence example</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">"VADER is smart, handsome, and funny!"</span>,  <span class="co"># punctuation emphasis handled correctly (sentiment intensity adjusted)</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"VADER is very smart, handsome, and funny."</span>, <span class="co"># booster words handled correctly (sentiment intensity adjusted)</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">"VADER is VERY SMART, handsome, and FUNNY."</span>,  <span class="co"># emphasis for ALLCAPS handled</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>             <span class="st">"VADER is VERY SMART, handsome, and FUNNY!!!"</span>, <span class="co"># combination of signals - VADER appropriately adjusts intensity</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>             <span class="st">"VADER is VERY SMART, uber handsome, and FRIGGIN FUNNY!!!"</span>, <span class="co"># booster words &amp; punctuation make this close to ceiling for score</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>             <span class="st">"VADER is not smart, handsome, nor funny."</span>,  <span class="co"># negation sentence example</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>             <span class="st">"The book was good."</span>,  <span class="co"># positive sentence</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>             <span class="st">"At least it isn't a horrible book."</span>,  <span class="co"># negated negative sentence with contraction</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>             <span class="st">"The book was only kind of good."</span>, <span class="co"># qualified positive sentence is handled correctly (intensity adjusted)</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>             <span class="st">"The plot was good, but the characters are uncompelling and the dialog is not great."</span>, <span class="co"># mixed negation sentence</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Today SUX!"</span>,  <span class="co"># negative slang with capitalization emphasis</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Today only kinda sux! But I'll get by, lol"</span>, <span class="co"># mixed sentiment example with slang and constrastive conjunction "but"</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Make sure you :) or :D today!"</span>,  <span class="co"># emoticons handled</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Catch utf-8 emoji such as such as 💘 and 💋 and 😁"</span>,  <span class="co"># emojis handled</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Not bad at all"</span>  <span class="co"># Capitalized negation</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>             ]</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>analyzer <span class="op">=</span> SentimentIntensityAnalyzer()</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sentence <span class="kw">in</span> sentences:</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>    vs <span class="op">=</span> analyzer.polarity_scores(sentence)</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="sc">{:-&lt;65}</span><span class="st"> </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(sentence, <span class="bu">str</span>(vs)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>VADER is smart, handsome, and funny.----------------------------- {'neg': 0.0, 'neu': 0.254, 'pos': 0.746, 'compound': 0.8316}
+VADER is smart, handsome, and funny!----------------------------- {'neg': 0.0, 'neu': 0.248, 'pos': 0.752, 'compound': 0.8439}
+VADER is very smart, handsome, and funny.------------------------ {'neg': 0.0, 'neu': 0.299, 'pos': 0.701, 'compound': 0.8545}
+VADER is VERY SMART, handsome, and FUNNY.------------------------ {'neg': 0.0, 'neu': 0.246, 'pos': 0.754, 'compound': 0.9227}
+VADER is VERY SMART, handsome, and FUNNY!!!---------------------- {'neg': 0.0, 'neu': 0.233, 'pos': 0.767, 'compound': 0.9342}
+VADER is VERY SMART, uber handsome, and FRIGGIN FUNNY!!!--------- {'neg': 0.0, 'neu': 0.294, 'pos': 0.706, 'compound': 0.9469}
+VADER is not smart, handsome, nor funny.------------------------- {'neg': 0.646, 'neu': 0.354, 'pos': 0.0, 'compound': -0.7424}
+The book was good.----------------------------------------------- {'neg': 0.0, 'neu': 0.508, 'pos': 0.492, 'compound': 0.4404}
+At least it isn't a horrible book.------------------------------- {'neg': 0.0, 'neu': 0.678, 'pos': 0.322, 'compound': 0.431}
+The book was only kind of good.---------------------------------- {'neg': 0.0, 'neu': 0.697, 'pos': 0.303, 'compound': 0.3832}
+The plot was good, but the characters are uncompelling and the dialog is not great. {'neg': 0.327, 'neu': 0.579, 'pos': 0.094, 'compound': -0.7042}
+Today SUX!------------------------------------------------------- {'neg': 0.779, 'neu': 0.221, 'pos': 0.0, 'compound': -0.5461}
+Today only kinda sux! But I'll get by, lol----------------------- {'neg': 0.127, 'neu': 0.556, 'pos': 0.317, 'compound': 0.5249}
+Make sure you :) or :D today!------------------------------------ {'neg': 0.0, 'neu': 0.294, 'pos': 0.706, 'compound': 0.8633}
+Catch utf-8 emoji such as such as 💘 and 💋 and 😁------------------ {'neg': 0.0, 'neu': 0.615, 'pos': 0.385, 'compound': 0.875}
+Not bad at all--------------------------------------------------- {'neg': 0.0, 'neu': 0.513, 'pos': 0.487, 'compound': 0.431}</code></pre>
+</div>
+</div>
+<ul>
+<li><strong>Importing VADER</strong>: The <code>SentimentIntensityAnalyzer</code> class from the <code>vaderSentiment</code> package is imported.</li>
+<li><strong>Sentences for Analysis</strong>: A list of sentences is defined, showcasing different scenarios like positive/negative sentiments, emphasis through punctuation and capitalization, booster words, negations, slang, and emoticons.</li>
+<li><strong>Analyzing Sentiment</strong>: The <code>SentimentIntensityAnalyzer</code> is used to compute a <code>polarity_scores</code> dictionary for each sentence. This dictionary contains four scores: ‘neg’ (negative), ‘neu’ (neutral), ‘pos’ (positive), and ‘compound’ (a normalized, composite score).</li>
+<li><strong>Printing Results</strong>: For each sentence, the sentiment scores are printed alongside the text.</li>
+</ul>
+<p>VADER uses a combination of a lexicon (a list of lexical features, e.g., words, emoticons) which are labeled according to their semantic orientation as either positive or negative. VADER not only tells about the Positivity and Negativity score but also tells us about how positive or negative a sentiment is.</p>
+<p>VADER analyzes sentiments primarily based on certain key aspects:</p>
+<ul>
+<li><strong>Lexicon</strong>: Words are scored for their positive or negative sentiment.</li>
+<li><strong>Rules</strong>: Incorporates grammatical and syntactical rules like capitalization, degree modifiers (e.g., “very”), and contrastive conjunctions (e.g., “but”).</li>
+<li><strong>Emoticons and Emoji</strong>: Interprets commonly used emoticons and emoji, which are significant in social media text.</li>
+<li><strong>Punctuation</strong>: Recognizes punctuation marks’ role in emphasizing sentiment intensity.</li>
+</ul>
+<p><strong>Improvement from Jane Austen Example</strong>: In the Jane Austen books example (using ‘bing’ lexicon), the sentiment analysis is mainly based on the presence of words categorized as positive or negative. This approach might not capture the nuances of sentiment expressed through modern slang, emoticons, emoji, punctuation, and capitalization, which are common in online communication.</p>
+<p>VADER, on the other hand, is designed to understand the nuances of social media language. It can interpret a wider range of expressions (like “SUX” or “:-)”) and modifiers (like “uber” or ALLCAPS) that significantly impact sentiment intensity. This makes VADER particularly suitable for analyzing text from platforms like Twitter, where such expressions are prevalent.</p>
+</section>
+<section id="inclass-exercise" class="level4" data-number="3.2.2.3">
+<h4 data-number="3.2.2.3" class="anchored" data-anchor-id="inclass-exercise"><span class="header-section-number">3.2.2.3</span> Inclass Exercise:</h4>
+<ul>
+<li>Use ChatGPT to generate texts for you to test how VADER works:</li>
+</ul>
+<ul>
+<li>Demo, and Discussion</li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+<section id="summary-today-and-for-next-lecture" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Summary Today and For Next Lecture</h1>
+<p>This lecture is designed to refresh your memory on <code>R</code> about text analysis, and using <code>R</code> in <code>VS Code</code> to apply NLP method like sentiment analysis.</p>
+<p>For next lecture, we will talk about Large Language Models and how can we use it in Economic Research.</p>
+</section>
+<section id="references" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> References</h1>
+<ul>
+<li>Text Mining with R: A Tidy Approach” was written by Julia Silge and David Robinson</li>
+</ul>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
