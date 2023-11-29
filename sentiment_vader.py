@@ -35,6 +35,6 @@ test_sentences = [
 
 
 analyzer = SentimentIntensityAnalyzer()
-for sentence in test_sentences:
+for sentence in sentences:
     vs = analyzer.polarity_scores(sentence)
     print("{:-<65} {}".format(sentence, str(vs)))

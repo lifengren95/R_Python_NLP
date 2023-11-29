@@ -16,7 +16,7 @@ format:
 python: python3
 ---
 
-Before we start learning Large Language Models (LLM), let's use this lecture to get our feet wet for Natural Language Processing (NLP) in both `R` and `Python`. This will include 
+Before we start learning Large Language Models (LLM), let's use this lecture to get our feet wet for Natural Language Processing (NLP) in both `R` and `Python`. 
 
 
 # Lecture Agenda
@@ -467,10 +467,23 @@ VADER, on the other hand, is designed to understand the nuances of social media 
 - Use ChatGPT to generate texts for you to test how VADER works:
 
 ```{python}
-
+#| eval: false
+test_sentences = [
+    "This new song is lit 🔥🔥🔥",
+    "Sigh... I guess today was just not my day 😞",
+    "Wow, that's awesome!!! 😃👍",
+    "I can't stand this! So frustrating! 😡",
+    "IDK what's going on, kinda confused rn 🤷‍♂️",
+    "LOL, that was hilarious 😂",
+    "Ugh, Mondays are the worst 😫",
+    "OMG, I just got the job offer!!! 😍",
+    "No way, that's cray cray 😜",
+    "Why is everyone so glum? Cheer up! 😊"
+]
 ```
 - Demo, and Discussion
 
+![Demo for VADER with ChatGPT generated test texts](./imgs/VADER_demo.png)
 
 # Summary Today and For Next Lecture
 

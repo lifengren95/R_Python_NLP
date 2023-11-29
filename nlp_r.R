@@ -25,6 +25,8 @@ v <- c(10, 20, 30, 40)
 
 new_dt <- data.frame(name=c("John", "Jane"), age=c(30, 25))
 print("Hello World!")
+
+
 #__________________________________________
 ##  Load Library----   
 #__________________________________________
@@ -34,9 +36,10 @@ library(textdata)
 library(tidytext)
 library(dplyr)
 library(stringr)
-
-
-
+library(tidyr)
+library(ggplot2)
+library(wordcloud)
+library(reshape2)
 #__________________________________________
 ##  Sentiment Analysis----   
 #__________________________________________
@@ -69,7 +72,7 @@ tidy_books %>%
   semi_join(positive) %>%
   count(word, sort = TRUE)
 
-library(tidyr)
+
 bing <- get_sentiments("bing")
 
 janeaustensentiment <- tidy_books %>%
@@ -78,7 +81,6 @@ janeaustensentiment <- tidy_books %>%
   spread(sentiment, n, fill = 0) %>%
   mutate(sentiment = positive - negative)
 
-library(ggplot2)
 
 ggplot(janeaustensentiment, aes(index, sentiment, fill = book)) +
   geom_bar(stat = "identity", show.legend = FALSE) +
@@ -100,13 +102,12 @@ bing_word_counts %>%
   labs(y = "Contribution to sentiment")
 
 
-library(wordcloud)
 
 cleaned_books %>%
   count(word) %>%
   with(wordcloud(word, n, max.words = 100))
 
-library(reshape2)
+
 
 tidy_books %>%
   inner_join(bing) %>%
